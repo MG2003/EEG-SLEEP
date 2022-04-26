@@ -1,8 +1,10 @@
-import bandpower
+import bandpower as bandpower
 import tkinter
 from tkinter import *
 from tkinter import Button, GROOVE
 from threading import *
+
+
 
 
 clicked = False
@@ -18,10 +20,15 @@ def threading():
 def proc():
     global clicked
     start['state'] = 'disabled'
-    bandpower.run()
-    
-    if(clicked == False):
+
+    if(bandpower.run()==0):
+        print('success')
+
+    else:
+        print('fail')
         
+
+    if(clicked == False):    
         proc()
     else:
         print('bye')
@@ -34,13 +41,13 @@ def proc():
 
 
 root = Tk()
-
-label = Label(root, text = "EEG Sleep Diagnosis")
-start = Button(root, text="START COLLECTION", command = threading, relief = GROOVE)
-end = Button(root, text = "STOP COLLECTION", command = click, relief = GROOVE)
-label.pack()
-start.pack()
-end.pack()
+root.geometry("400x400") 
+label = Label(root, text = "EEG Sleep Diagnosis", font = ("Arial", 17))
+start = Button(root, text="START COLLECTION", command = threading, relief = GROOVE, width = 17, height = 3)
+end = Button(root, text = "STOP COLLECTION", command = click, relief = GROOVE, width = 17, height = 3)
+label.pack(padx = 10, pady = 10)
+start.pack(padx = 30, pady = 10, side = tkinter.LEFT)
+end.pack(padx = 30, pady = 10, side = tkinter.LEFT)
 
 
 root.mainloop()
