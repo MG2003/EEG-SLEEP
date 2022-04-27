@@ -1,3 +1,4 @@
+from turtle import bgcolor
 import bandpower as bandpower
 import tkinter
 from tkinter import *
@@ -39,21 +40,23 @@ def proc():
         
    
         
-fontfamily = {
+themefamily = {
     "main": 8,
-    "title": 17
+    "title": 17,
+    "labelcol": '#ffe8f0'
 
 }
 
 root = Tk()
+root.configure(background='pink')
 root.geometry("350x350") 
-label = Label(root, text = "EEG Sleep Diagnosis", font = ("Arial", fontfamily["title"]))
-instructions = Label(root, text="Insert bluetooth dongle into computer, \nmake sure EEG is on, and press start collection")
-information = Text(root, borderwidth= 2, relief = GROOVE, width = 40, height = 10)
-start = Button(root, text="START COLLECTION", command = threading, relief = GROOVE, width = 17, height = 3, font = ("Arial", fontfamily["main"]))
-end = Button(root, text = "STOP COLLECTION", command = click, relief = GROOVE, width = 17, height = 3, font = ("Arial", fontfamily["main"]))
-label.pack(padx = 10, pady = 10)
-instructions.pack()
+label = Label(root, text = "EEG Sleep Diagnosis", font = ("Arial", themefamily["title"]), bg = themefamily["labelcol"])
+instructions = Label(root, text="Insert bluetooth dongle into computer, \nmake sure EEG is on, and press start collection", bg = themefamily["labelcol"])
+information = Text(root, borderwidth= 2, relief = GROOVE, width = 40, height = 10, bg = themefamily["labelcol"])
+start = Button(root, text="START COLLECTION", command = threading, relief = GROOVE, width = 17, height = 3, font = ("Arial", themefamily["main"]), bg = themefamily["labelcol"])
+end = Button(root, text = "STOP COLLECTION", command = click, relief = GROOVE, width = 17, height = 3, font = ("Arial", themefamily["main"]), bg = themefamily["labelcol"])
+label.pack(padx = 15, pady = 10)
+instructions.pack(pady = 10)
 information.pack(pady = 5)
 start.pack(padx = 30, side = LEFT)
 end.pack(padx = 30, side = RIGHT)
