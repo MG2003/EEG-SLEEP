@@ -2,7 +2,7 @@ import argparse
 import time
 import brainflow
 import numpy as np
-
+import time
 from brainflow.board_shim import BoardShim, BrainFlowInputParams, LogLevels, BoardIds
 from brainflow.data_filter import DataFilter, FilterTypes, AggOperations, WindowFunctions, DetrendOperations
 
@@ -60,16 +60,24 @@ def run():
     board.prepare_session()
     """
     board.start_stream()
+    init = time.time()
+    while(time.time()-init<300):
+        BoardShim.log_message(LogLevels.LEVEL_INFO.value, 'start sleeping in the main thread')
+        time.sleep(5)
+        nfft = DataFilter.get_nearest_power_of_two(sampling_rate)
+        print(nfft)
+        data = board.get_current_board_data(sampling_rate*(int(round(time.time()-init))))
+        eeg_channels = board_descr['eeg_channels']
+        eeg_channel = eeg_channels[1]
+        DataFilter.detrend(data[eeg_channel], DetrendOperations.LINEAR.value)
+        psd = DataFilter.get_psd_welch(data[eeg_channel], nfft, nfft // 2, sampling_rate,
+                                    WindowFunctions.BLACKMAN_HARRIS.value)
 
- 
-     
-    BoardShim.log_message(LogLevels.LEVEL_INFO.value, 'start sleeping in the main thread')
-    time.sleep(5)
-    nfft = DataFilter.get_nearest_power_of_two(sampling_rate)
-    print(nfft)
-    data = board.get_board_data()
-
+        band_power_alpha = DataFilter.get_band_power(psd, 8.0, 13.0)
+        band_power_theta = DataFilter.get_band_power(psd, 4.0, 8.0)
+        print("theta/alpha:%f", band_power_theta / band_power_alpha)
     board.stop_stream()
+    """
     board.release_session()
 
     eeg_channels = board_descr['eeg_channels']
@@ -88,7 +96,9 @@ def run():
     "alpha": band_power_alpha,
 
     }
+    """
 
-    return sendtogui
-    
+
+   # return sendtogui
+run()
 
